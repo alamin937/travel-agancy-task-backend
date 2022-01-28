@@ -30,6 +30,7 @@ async function run() {
     const blogCollection = database.collection("Blog");
     const userCollection = database.collection("user")
     const experienceCollection = database.collection("experience")
+    const placeorderCollection = database.collection("placeorder")
 
 
 
@@ -161,6 +162,33 @@ async function run() {
           console.log(result)
           res.send(result)
 
+    })
+
+
+
+    app.post('/placeorder', async(req,res) =>{
+        const placeorder = req.body;
+        const result = await placeorderCollection.insertOne(placeorder)
+        console.log(req.body);
+        console.log(result)
+        res.json(result) 
+    })
+
+
+    app.get('/placeorder/:email', async(req,res) =>{
+          const email = req.params.email;
+          const query ={email: email}
+          const cursor = placeorderCollection.find(query)
+          const result = await cursor.toArray()
+          res.send(result);
+    })
+
+
+    app.delete('/placeorder/:id', async(req,res) =>{
+          const id = req.params.id;
+          const query = {_id:ObjectId(id)}
+          const result = await placeorderCollection.deleteOne(query)
+          res.send(result);
     })
 
 
